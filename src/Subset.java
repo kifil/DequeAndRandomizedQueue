@@ -11,18 +11,17 @@ public class Subset {
 
         RandomizedQueue<String> randomQueue = new RandomizedQueue<String>();
 
-//        String[] strings = StdIn.readAllStrings();
-//
-//        for(String s: strings){
-//            randomQueue.enqueue(s);
-//        }
-//
         String s = StdIn.readString();
         while(s != null && s != ""){
             randomQueue.enqueue(s);
-            s = StdIn.readString();
+            try{
+                s = StdIn.readString();
+            }
+            //since I'm not sure how to emulate command line inputs, break out of the loop when no more strings to read
+            catch (Exception e){
+                break;
+            }
         }
-
 
         for(int i = 0; i < k; i++){
             StdOut.println(randomQueue.dequeue());

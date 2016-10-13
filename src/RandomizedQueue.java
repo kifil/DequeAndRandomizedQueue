@@ -5,16 +5,15 @@ import java.util.Iterator;
 /**
  * Created by User on 10/12/2016.
  */
-public class RandomizedQueue<ItemType> implements Iterable<ItemType> {
+public class RandomizedQueue<Item> implements Iterable<Item> {
 
-    private ItemType[] itemArray;
-
+    private Item[] itemArray;
     private int firstOpenIndex; //rename to firstOpenIndex
 
     // construct an empty randomized queue
     public RandomizedQueue() {
         //typecasting needed for generic arrays
-        itemArray = (ItemType[]) new Object[1];
+        itemArray = (Item[]) new Object[1];
         firstOpenIndex = 0;
     }
 
@@ -29,7 +28,10 @@ public class RandomizedQueue<ItemType> implements Iterable<ItemType> {
     }
 
     // add the item
-    public void enqueue(ItemType item) {
+    public void enqueue(Item item) {
+        if(item == null){
+            throw new java.lang.NullPointerException();
+        }
 
         //double array if we are at capacity and copy elements
         if(firstOpenIndex == itemArray.length){
@@ -40,8 +42,9 @@ public class RandomizedQueue<ItemType> implements Iterable<ItemType> {
         firstOpenIndex++;
     }
 
+    //resize the array and copy the elements to the new array
     private void resize(int newSize){
-        ItemType[] newItemArray = (ItemType[]) new Object[newSize];
+        Item[] newItemArray = (Item[]) new Object[newSize];
         for(int i = 0; i < firstOpenIndex; i++){
             newItemArray[i] = itemArray[i];
         }
@@ -50,14 +53,14 @@ public class RandomizedQueue<ItemType> implements Iterable<ItemType> {
     }
 
     // remove and return a random item
-    public ItemType dequeue(){
+    public Item dequeue(){
         if(isEmpty()){
             throw new java.util.NoSuchElementException();
         }
 
         int randomIndex = StdRandom.uniform(0,firstOpenIndex);
 
-        ItemType randomItem = itemArray[randomIndex];
+        Item randomItem = itemArray[randomIndex];
 
         //move end item to replace removed item to keep a contiguous array
         itemArray[randomIndex] = itemArray[firstOpenIndex - 1];
@@ -66,7 +69,6 @@ public class RandomizedQueue<ItemType> implements Iterable<ItemType> {
         firstOpenIndex--;
 
         //shrink array in half if we are 1/4 full
-        //do we want array to get down below size 2?
         if(firstOpenIndex - 1 <= itemArray.length / 4 && itemArray.length >= 4){
             resize(itemArray.length / 2);
         }
@@ -75,7 +77,7 @@ public class RandomizedQueue<ItemType> implements Iterable<ItemType> {
     }
 
     // return (but do not remove) a random item
-    public ItemType sample(){
+    public Item sample(){
         if(isEmpty()){
             throw new java.util.NoSuchElementException();
         }
@@ -85,21 +87,18 @@ public class RandomizedQueue<ItemType> implements Iterable<ItemType> {
         return itemArray[randomIndex];
     }
 
-    public Iterator<ItemType> iterator() {return new ListIterator();}
+    public Iterator<Item> iterator() {return new ListIterator();}
 
-    private class ListIterator implements Iterator<ItemType> {
+    private class ListIterator implements Iterator<Item> {
         int currentIndex = 0;
-        ItemType[] iteratorArray = (ItemType[]) new Object[firstOpenIndex];
+        Item[] iteratorArray = (Item[]) new Object[firstOpenIndex];
 
         private ListIterator() {
-
             for (int i = 0; i < iteratorArray.length; i++) {
                 iteratorArray[i] = itemArray[i];
             }
 
-            int thing = iteratorArray.length;
             //randomize the array so each iterator returns different items
-            //might not be good enough, should be 2n though?
             StdRandom.shuffle(iteratorArray);
         }
 
@@ -107,12 +106,12 @@ public class RandomizedQueue<ItemType> implements Iterable<ItemType> {
             return currentIndex < iteratorArray.length;
         }
 
-        public ItemType next() {
+        public Item next() {
             if (currentIndex == iteratorArray.length) {
                 throw new java.util.NoSuchElementException();
             }
 
-            ItemType itemToReturn = iteratorArray[currentIndex];
+            Item itemToReturn = iteratorArray[currentIndex];
             currentIndex++;
 
             return itemToReturn;

@@ -6,9 +6,9 @@ import java.util.Iterator;
  * Created by User on 10/11/2016.
  */
 
-public class Deque<ItemType> implements Iterable<ItemType> {
+public class Deque<Item> implements Iterable<Item> {
     private class Node{
-        ItemType item;
+        Item item;
         Node nextNode;
         Node previousNode;
     }
@@ -31,7 +31,11 @@ public class Deque<ItemType> implements Iterable<ItemType> {
         return dequeSize;
     }
 
-    public void addFirst(ItemType item) {
+    public void addFirst(Item item) {
+        if(item == null){
+            throw new java.lang.NullPointerException();
+        }
+
         Node newFirstNode = new Node();
 
         newFirstNode.item = item;
@@ -53,7 +57,11 @@ public class Deque<ItemType> implements Iterable<ItemType> {
     }
 
     // add the item to the front
-    public void addLast(ItemType item) {
+    public void addLast(Item item) {
+        if(item == null){
+            throw new java.lang.NullPointerException();
+        }
+
         Node newLastNode = new Node();
 
         newLastNode.item = item;
@@ -76,7 +84,7 @@ public class Deque<ItemType> implements Iterable<ItemType> {
     // add the item to the end
 
 
-    public ItemType removeFirst() {
+    public Item removeFirst() {
         if(dequeSize == 0){
             throw new java.util.NoSuchElementException();
         }
@@ -95,7 +103,7 @@ public class Deque<ItemType> implements Iterable<ItemType> {
     }
 
     // remove and return the item from the front
-    public ItemType removeLast(){
+    public Item removeLast(){
         if(dequeSize == 0){
             throw new java.util.NoSuchElementException();
         }
@@ -112,16 +120,16 @@ public class Deque<ItemType> implements Iterable<ItemType> {
         return oldLastNode.item;
     }                 // remove and return the item from the end
 
-    public Iterator<ItemType> iterator() {return new ListIterator();}
+    public Iterator<Item> iterator() {return new ListIterator();}
 
-    private class ListIterator implements Iterator<ItemType> {
+    private class ListIterator implements Iterator<Item> {
         private Node currentNode = firstNode;
 
         public boolean hasNext() {
             return currentNode != null;
         }
 
-        public ItemType next() {
+        public Item next() {
             if (currentNode == null) {
                 throw new java.util.NoSuchElementException();
             }
